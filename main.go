@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	_ "gorm.io/gen"
+)
 
 func main() {
-	fmt.Println("111")
+
 }
