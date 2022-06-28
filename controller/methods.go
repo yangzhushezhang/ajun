@@ -24,6 +24,7 @@ func Post(w http.ResponseWriter, r *http.Request) {
 	A = append(A, r.Form["name"]...)
 	A = append(A, r.Form["sex"]...)
 	A = append(A, r.Form["age"]...)
+	//A = append(A, r.Form["form"]...)
 	A = append(A, r.Form["action"]...)
 
 	B := A[0]
@@ -31,28 +32,29 @@ func Post(w http.ResponseWriter, r *http.Request) {
 	D := A[2]
 	E := A[3]
 	F := A[4]
+	G := "information"
 
 	if F == "insert" && F != "" { //增
 		fmt.Println(D)
-		db.Raw("INSERT INTO information(name,sex,age) VALUES  ('" + C + "','" + D + "'," + E + ")").Scan(&a)
+		db.Raw("INSERT INTO " + G + "(name,sex,age) VALUES  ('" + C + "','" + D + "'," + E + ")").Scan(&a)
 		fmt.Fprintf(w, "已入库")
 		return
 	}
 
 	if F == "delete" && F != "" { //删
-		db.Raw("DELETE FROM information WHERE id='" + B + "'").Scan(&a)
+		db.Raw("DELETE FROM " + G + " WHERE id='" + B + "'").Scan(&a)
 		fmt.Fprintf(w, "已清除")
 		return
 	}
 
 	if F == "change" && F != "" { //改
-		db.Raw("UPDATE information SET ID='" + B + "',`name`='" + C + "',sex=" + D + ",age=25 WHERE  `name`='" + B + "'").Scan(&a)
+		db.Raw("UPDATE " + G + " SET ID='" + B + "',`name`='" + C + "',sex='" + D + "',age=" + E + " WHERE  `id`='" + B + "'").Scan(&a)
 		fmt.Fprintf(w, "已修改")
 		return
 	}
 
 	if F == "check" && F != "" { //查
-		db.Raw("select * from information where id='" + B + "'").Scan(&a)
+		db.Raw("select * from " + G + " where id='" + B + "'").Scan(&a)
 		q, err := json.Marshal(a)
 		if err != nil {
 			fmt.Println("err:", err.Error())
@@ -60,7 +62,7 @@ func Post(w http.ResponseWriter, r *http.Request) {
 		w.Write(q)
 		return
 	} else if F == "checkq" && F != "" {
-		db.Raw("select * from information").Scan(&a)
+		db.Raw("select * from " + G).Scan(&a)
 		q, err := json.Marshal(a)
 		if err != nil {
 			fmt.Println("err:", err.Error())
